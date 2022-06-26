@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    # command: sh -c "cd app && PORT=8080 npm start"
+    ports:
+      - "8080:8080"
+    init: true
+    tty: true
+    stdin_open: true
