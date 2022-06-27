@@ -1,7 +1,7 @@
 import _axios from 'axios'
 
 const axios = _axios.create({
-  baseURL: process.env.API_URL || 'http://localhost:3000',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000',
 })
 
 //リクエスト インターセプター
