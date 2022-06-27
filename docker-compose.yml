@@ -12,3 +12,5 @@ services:
     init: true
     tty: true
     stdin_open: true
+    environment:
+      PORT: ${PORT}
