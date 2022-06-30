@@ -1,3 +1,4 @@
+import axios from 'lib/axios'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -75,8 +76,24 @@ const SignUp = () => {
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+    try {
+      const response = await axios.post('/api/v1//signup', {
+        user: {
+          name: name,
+          email: email,
+          password: password,
+          password_confirmation: passwordConfirmation,
+        },
+      })
+      console.log(response.status)
+      console.log(response.data)
+    } catch (error) {
+      const errorRescpnse = error.response
+      console.log(errorRescpnse.status)
+      console.log(errorRescpnse.data)
+    }
   }
 
   return (
