@@ -1,82 +1,18 @@
-import axios from 'lib/axios'
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import axios from 'lib/axios'
+import { Link } from 'react-router-dom'
 
 import FormErrorMessages from 'components/ui/FormErrorMessages'
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-  border: 1px solid black;
-`
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 70%;
-  max-width: 450px;
-  height: 550px;
-  border: 1px solid #dfdfdf;
-  padding: 30px;
-  border-radius: 10px;
-  background-color: #fdf5f5;
-  box-shadow: 2px 12px 17px -7px #383838;
-`
-
-const FormTitle = styled.h1`
-  text-align: center;
-  margin: 13px 0;
-`
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
-
-const FormLabel = styled.label`
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 3px;
-`
-
-const FormInput = styled.input`
-  border: 1px solid grey;
-  padding: 15px;
-  border-radius: 4px;
-  &:focus {
-    border: 2px solid #ff9900;
-    z-index: 10;
-    outline: 0;
-  }
-`
-
-const FormButton = styled.button`
-  background-image: linear-gradient(to right, #fc9a05, #f5c11e);
-  width: 100%;
-  margin-top: 10px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  padding: 10px 30px;
-  font-size: 20px;
-  font-weight: bold;
-  transition: all 0.3s;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.5;
-    transition: opacity 0.3s;
-  }
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`
+import {
+  AuthContainer as Container,
+  AuthForm as Form,
+  AuthFormTitle as FormTitle,
+  AuthFormGroup as FormGroup,
+  AuthFormLabel as FormLabel,
+  AuthFormInput as FormInput,
+  AuthFormButton as FormButton,
+} from 'components/css/Auth'
 
 const SignUp = () => {
   const [name, setName] = useState('')
@@ -172,6 +108,7 @@ const SignUp = () => {
         <FormButton type="submit" disabled={!submittable || processing}>
           登録
         </FormButton>
+        <Link to="/signin">ログインフォームはこちら</Link>
       </Form>
     </Container>
   )
