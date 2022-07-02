@@ -1,6 +1,8 @@
 import axios from 'lib/axios'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+
+import FormErrorMessages from 'components/ui/FormErrorMessages'
 
 const Container = styled.div`
   display: flex;
@@ -45,7 +47,7 @@ const FormLabel = styled.label`
 
 const FormInput = styled.input`
   border: 1px solid grey;
-  padding: 20px;
+  padding: 15px;
   border-radius: 4px;
   &:focus {
     border: 2px solid #ff9900;
@@ -55,18 +57,24 @@ const FormInput = styled.input`
 `
 
 const FormButton = styled.button`
-  background: #0563b4;
+  background-image: linear-gradient(to right, #fc9a05, #f5c11e);
   width: 100%;
   margin-top: 10px;
   border: none;
   border-radius: 5px;
   color: white;
   padding: 10px 30px;
-  font-size: 15px;
-  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
   transition: all 0.3s;
+  cursor: pointer;
   &:hover {
-    background-color: #0e528d;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `
 
@@ -75,11 +83,24 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [formErros, setFormErrors] = useState({})
+  const [submittable, setSubmittable] = useState(false)
+  const [processing, setProcessing] = useState(false)
+
+  useEffect(() => {
+    if (name && email && password && passwordConfirmation) {
+      setSubmittable(true)
+    } else {
+      setSubmittable(false)
+    }
+  }, [name, email, password, passwordConfirmation])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    if (processing) return
+    setProcessing(true)
     try {
-      const response = await axios.post('/api/v1//signup', {
+      const response = await axios.post('/api/v1/signup', {
         user: {
           name: name,
           email: email,
@@ -91,9 +112,10 @@ const SignUp = () => {
       console.log(response.data)
     } catch (error) {
       const errorRescpnse = error.response
-      console.log(errorRescpnse.status)
-      console.log(errorRescpnse.data)
+      console.log(errorRescpnse.data.errors)
+      setFormErrors({ ...errorRescpnse.data.errors })
     }
+    setProcessing(false)
   }
 
   return (
@@ -110,6 +132,7 @@ const SignUp = () => {
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
+          <FormErrorMessages errors={formErros.name} />
         </FormGroup>
         <FormGroup>
           <FormLabel htmlFor="email">メールアドレス</FormLabel>
@@ -121,6 +144,7 @@ const SignUp = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
+          <FormErrorMessages errors={formErros.email} />
         </FormGroup>
         <FormGroup>
           <FormLabel htmlFor="password">パスワード</FormLabel>
@@ -132,6 +156,7 @@ const SignUp = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
+          <FormErrorMessages errors={formErros.password} />
         </FormGroup>
         <FormGroup>
           <FormLabel htmlFor="password_confirmation">確認用パスワード</FormLabel>
@@ -142,8 +167,11 @@ const SignUp = () => {
             value={passwordConfirmation}
             onChange={(event) => setPasswordConfirmation(event.target.value)}
           />
+          <FormErrorMessages errors={formErros.passwordConfirmation} />
         </FormGroup>
-        <FormButton type="submit">登録</FormButton>
+        <FormButton type="submit" disabled={!submittable || processing}>
+          登録
+        </FormButton>
       </Form>
     </Container>
   )
