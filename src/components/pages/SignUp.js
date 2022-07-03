@@ -19,7 +19,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
-  const [formErros, setFormErrors] = useState({})
+  const [formErrors, setFormErrors] = useState({})
   const [submittable, setSubmittable] = useState(false)
   const [processing, setProcessing] = useState(false)
 
@@ -68,7 +68,7 @@ const SignUp = () => {
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
-          <FormErrorMessages errors={formErros.name} />
+          <FormErrorMessages errors={formErrors.name} />
         </FormGroup>
         <FormGroup>
           <FormLabel htmlFor="email">メールアドレス</FormLabel>
@@ -80,7 +80,7 @@ const SignUp = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <FormErrorMessages errors={formErros.email} />
+          <FormErrorMessages errors={formErrors.email} />
         </FormGroup>
         <FormGroup>
           <FormLabel htmlFor="password">パスワード</FormLabel>
@@ -92,7 +92,7 @@ const SignUp = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <FormErrorMessages errors={formErros.password} />
+          <FormErrorMessages errors={formErrors.password} />
         </FormGroup>
         <FormGroup>
           <FormLabel htmlFor="password_confirmation">確認用パスワード</FormLabel>
@@ -103,7 +103,7 @@ const SignUp = () => {
             value={passwordConfirmation}
             onChange={(event) => setPasswordConfirmation(event.target.value)}
           />
-          <FormErrorMessages errors={formErros.passwordConfirmation} />
+          <FormErrorMessages errors={formErrors.passwordConfirmation} />
         </FormGroup>
         <FormButton type="submit" disabled={!submittable || processing}>
           登録

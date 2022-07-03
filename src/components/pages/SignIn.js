@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'lib/axios'
 
-import FormErrorMessages from 'components/ui/FormErrorMessages'
+import styled from 'styled-components'
 
 import {
   AuthContainer as Container,
@@ -14,10 +14,14 @@ import {
   AuthLink as Link,
 } from 'components/css/Auth'
 
+const ErrorMessage = styled.div`
+  color: red;
+`
+
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [formErros, setFormErrors] = useState({})
+  const [formError, setFormError] = useState('')
   const [submittable, setSubmittable] = useState(false)
   const [processing, setProcessing] = useState(false)
 
@@ -44,15 +48,16 @@ const SignIn = () => {
       console.log(response.data)
     } catch (error) {
       const errorRescpnse = error.response
-      console.log(errorRescpnse.data.errors)
-      setFormErrors({ ...errorRescpnse.data.errors })
+      setFormError(errorRescpnse.data.message)
     }
+    setProcessing(false)
   }
 
   return (
     <Container>
       <Form onSubmit={handleSubmit}>
         <FormTitle>ログインフォーム</FormTitle>
+        <ErrorMessage>{formError}</ErrorMessage>
         <FormGroup>
           <FormLabel htmlFor="email">メールアドレス</FormLabel>
           <FormInput
@@ -63,7 +68,6 @@ const SignIn = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <FormErrorMessages errors={formErros.email} />
         </FormGroup>
         <FormGroup>
           <FormLabel htmlFor="password">パスワード</FormLabel>
@@ -75,7 +79,6 @@ const SignIn = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <FormErrorMessages errors={formErros.password} />
         </FormGroup>
         <FormButton type="submit" disabled={!submittable || processing}>
           ログイン
