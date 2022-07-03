@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'lib/axios'
-import { Link } from 'react-router-dom'
 
 import FormErrorMessages from 'components/ui/FormErrorMessages'
 
@@ -12,6 +11,7 @@ import {
   AuthFormLabel as FormLabel,
   AuthFormInput as FormInput,
   AuthFormButton as FormButton,
+  AuthLink as Link,
 } from 'components/css/Auth'
 
 const SignUp = () => {

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'lib/axios'
-import { Link } from 'react-router-dom'
 
 import FormErrorMessages from 'components/ui/FormErrorMessages'
 
@@ -12,6 +11,7 @@ import {
   AuthFormLabel as FormLabel,
   AuthFormInput as FormInput,
   AuthFormButton as FormButton,
+  AuthLink as Link,
 } from 'components/css/Auth'
 
 const SignIn = () => {
@@ -29,7 +29,25 @@ const SignIn = () => {
     }
   }, [email, password])
 
-  const handleSubmit = () => {}
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (processing) return
+    setProcessing(true)
+    try {
+      const response = await axios.post('/api/v1/signin', {
+        user: {
+          email: email,
+          password: password,
+        },
+      })
+      console.log(response.status)
+      console.log(response.data)
+    } catch (error) {
+      const errorRescpnse = error.response
+      console.log(errorRescpnse.data.errors)
+      setFormErrors({ ...errorRescpnse.data.errors })
+    }
+  }
 
   return (
     <Container>

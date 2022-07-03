@@ -1,5 +1,8 @@
+import { Link } from 'react-router-dom'
+
 import styled from 'styled-components'
 import { Container as CommonContainer } from 'components/css/Common'
+import palette from 'components/themes/palette'
 
 const AuthContainer = styled.div`
   height: 100vh;
@@ -17,7 +20,7 @@ const AuthForm = styled.form`
   border: 1px solid #dfdfdf;
   padding: 30px;
   border-radius: 10px;
-  background-color: #fdf5f5;
+  background-color: ${palette.secondary.light};
   box-shadow: 2px 12px 17px -7px #383838;
 `
 
@@ -33,7 +36,6 @@ const AuthFormGroup = styled.div`
 `
 
 const AuthFormLabel = styled.label`
-  font-size: 15px;
   font-weight: 600;
   margin-bottom: 3px;
 `
@@ -43,21 +45,21 @@ const AuthFormInput = styled.input`
   padding: 15px;
   border-radius: 4px;
   &:focus {
-    border: 2px solid #ff9900;
+    border: 2px solid ${palette.primary.main};
     z-index: 10;
     outline: 0;
   }
 `
 
 const AuthFormButton = styled.button`
-  background-image: linear-gradient(to right, #fc9a05, #f5c11e);
+  background-image: linear-gradient(to right, ${palette.primary.main}, ${palette.primary.light});
   width: 100%;
   margin-top: 10px;
   border: none;
   border-radius: 5px;
   color: white;
   padding: 10px 30px;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
   transition: all 0.3s;
   cursor: pointer;
@@ -71,6 +73,14 @@ const AuthFormButton = styled.button`
   }
 `
 
+const AuthLink = styled(Link)`
+  transition: color 0.5s;
+  &:hover {
+    color: ${palette.primary.light};
+    transition: color 0.5s;
+  }
+`
+
 export {
   AuthContainer,
   AuthForm,
@@ -79,4 +89,5 @@ export {
   AuthFormLabel,
   AuthFormInput,
   AuthFormButton,
+  AuthLink,
 }
