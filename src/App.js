@@ -1,4 +1,7 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { signInAction } from 'reducks/users/actions'
+import { getUserId } from 'reducks/users/selectors'
 
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
@@ -28,6 +31,14 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const App = () => {
+  const dispatch = useDispatch()
+  const selector = useSelector((state) => state)
+  const uid = getUserId(selector)
+  const navigate = useNavigate()
+
+  console.log(selector.users)
+  console.log(uid)
+
   return (
     <>
       <GlobalStyle />
@@ -39,6 +50,14 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
         </Routes>
       </Layout>
+      <button
+        onClick={() => {
+          dispatch(signInAction({ uid: '00001', usename: 'sakakidai' }))
+          navigate('/')
+        }}
+      >
+        SignIn
+      </button>
     </>
   )
 }

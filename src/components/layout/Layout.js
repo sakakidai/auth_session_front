@@ -3,10 +3,8 @@ import MainNavigation from 'components/layout/MainNavigation'
 const Layout = ({ children }) => {
   return (
     <>
-      <main>
-        <MainNavigation />
-        {children}
-      </main>
+      <MainNavigation />
+      <main>{children}</main>
     </>
   )
 }
