@@ -1,8 +1,11 @@
+// The thunk middleware was automatically added
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { UsersReducer } from 'reducks/users/reducers'
 
 const createStore = () => {
-  return configureStore({ reducer: combineReducers({ users: UsersReducer }) })
+  return configureStore({
+    reducer: combineReducers({ users: UsersReducer }),
+  })
 }
 
 const store = createStore()
