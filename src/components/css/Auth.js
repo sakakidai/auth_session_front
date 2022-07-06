@@ -27,6 +27,7 @@ const AuthForm = styled.form`
 const AuthFormTitle = styled.h1`
   text-align: center;
   margin: 13px 0;
+  color: ${palette.primary.light};
 `
 
 const AuthFormGroup = styled.div`

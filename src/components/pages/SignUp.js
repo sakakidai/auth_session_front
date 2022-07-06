@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'lib/axios'
+import { useDispatch } from 'react-redux'
+import { signUp } from 'reducks/users/operations'
 
 import FormErrorMessages from 'components/ui/FormErrorMessages'
 
@@ -15,6 +17,8 @@ import {
 } from 'components/css/Auth'
 
 const SignUp = () => {
+  const dispatch = useDispatch()
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -35,21 +39,11 @@ const SignUp = () => {
     event.preventDefault()
     if (processing) return
     setProcessing(true)
+    // TODO: 返り値がないものにawaitしている。
     try {
-      const response = await axios.post('/api/v1/signup', {
-        user: {
-          name: name,
-          email: email,
-          password: password,
-          password_confirmation: passwordConfirmation,
-        },
-      })
-      console.log(response.status)
-      console.log(response.data)
+      await dispatch(signUp(name, email, password, passwordConfirmation))
     } catch (error) {
-      const errorRescpnse = error.response
-      console.log(errorRescpnse.data.errors)
-      setFormErrors({ ...errorRescpnse.data.errors })
+      setFormErrors({ ...error })
     }
     setProcessing(false)
   }
@@ -106,7 +100,7 @@ const SignUp = () => {
           <FormErrorMessages errors={formErrors.passwordConfirmation} />
         </FormGroup>
         <FormButton type="submit" disabled={!submittable || processing}>
-          登録
+          アカウントを登録する
         </FormButton>
         <Link to="/signin">ログインフォームはこちら</Link>
       </Form>
