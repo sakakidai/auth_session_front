@@ -9,6 +9,7 @@ import Home from 'components/pages/Home'
 import Dashboard from 'components/pages/Dashboard'
 import SignUp from 'components/pages/SignUp'
 import SignIn from 'components/pages/SignIn'
+import QiitaItems from 'components/pages/QiitaItems'
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -37,6 +38,7 @@ const App = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/qiita" element={<QiitaItems />} />
         </Routes>
       </Layout>
     </>

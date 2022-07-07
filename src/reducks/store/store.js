@@ -1,12 +1,10 @@
 // The thunk middleware was automatically added
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { UsersReducer } from 'reducks/users/reducers'
+import qiitaReducer from 'reducks/store/qiitaSlice'
 
-const createStore = () => {
-  return configureStore({
-    reducer: combineReducers({ users: UsersReducer }),
-  })
-}
+const store = configureStore({
+  reducer: combineReducers({ users: UsersReducer, qiita: qiitaReducer }),
+})
 
-const store = createStore()
 export default store

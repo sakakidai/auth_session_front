@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'lib/axios'
 import { useDispatch } from 'react-redux'
 import { signUp } from 'reducks/users/operations'
 
@@ -41,7 +40,7 @@ const SignUp = () => {
     setProcessing(true)
     // TODO: 返り値がないものにawaitしている。
     try {
-      await dispatch(signUp(name, email, password, passwordConfirmation))
+      dispatch(await signUp(name, email, password, passwordConfirmation))
     } catch (error) {
       setFormErrors({ ...error })
     }
