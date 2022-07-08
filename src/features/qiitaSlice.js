@@ -1,6 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getItems } from 'api/qiitaApi'
 
+// Thunk
+export const fetchItems = () => async (dispatch) => {
+  try {
+    dispatch(fetchStart())
+    dispatch(fetchSuccess(await getItems()))
+  } catch (error) {
+    dispatch(fetchFailure(error.message))
+  }
+}
+
 // Slice
 export const qiitaSlice = createSlice({
   name: 'qiita',
@@ -28,16 +38,6 @@ export const qiitaSlice = createSlice({
 
 // Actions
 export const { fetchStart, fetchFailure, fetchSuccess } = qiitaSlice.actions
-
-// 外部からはこの関数を呼んでもらう
-export const fetchItems = () => async (dispatch) => {
-  try {
-    dispatch(fetchStart())
-    dispatch(fetchSuccess(await getItems()))
-  } catch (error) {
-    dispatch(fetchFailure(error.stack))
-  }
-}
 
 // Selectors
 export const selectQiita = ({ qiita }) => qiita
