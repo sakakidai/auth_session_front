@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'lib/axios'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { userLogin, userSelector, clearErrors } from 'features/userSlice'
 
 import styled from 'styled-components'
 
@@ -19,12 +21,16 @@ const ErrorMessage = styled.div`
 `
 
 const SignIn = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { isLoading, isError, errors } = useSelector(userSelector)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [formError, setFormError] = useState('')
   const [submittable, setSubmittable] = useState(false)
-  const [processing, setProcessing] = useState(false)
 
+  // フォームバリデーション
   useEffect(() => {
     if (email && password) {
       setSubmittable(true)
@@ -33,24 +39,19 @@ const SignIn = () => {
     }
   }, [email, password])
 
+  // フォームにエラーメッセージの反映
+  useEffect(() => {
+    if (isError) {
+      setFormError(errors.message)
+      dispatch(clearErrors())
+    }
+  }, [isError, errors, dispatch])
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (processing) return
-    setProcessing(true)
-    try {
-      const response = await axios.post('/api/v1/signin', {
-        user: {
-          email: email,
-          password: password,
-        },
-      })
-      console.log(response.status)
-      console.log(response.data)
-    } catch (error) {
-      const errorRescpnse = error.response
-      setFormError(errorRescpnse.data.message)
-    }
-    setProcessing(false)
+    if (isLoading) return
+    await dispatch(userLogin({ email: email, password: password })).unwrap()
+    navigate('/')
   }
 
   return (
@@ -80,7 +81,7 @@ const SignIn = () => {
             onChange={(event) => setPassword(event.target.value)}
           />
         </FormGroup>
-        <FormButton type="submit" disabled={!submittable || processing}>
+        <FormButton type="submit" disabled={!submittable || isLoading}>
           ログイン
         </FormButton>
         <Link to="/signup">新規会員登録はこちら</Link>

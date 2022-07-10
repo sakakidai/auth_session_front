@@ -21,6 +21,24 @@ export const userRegister = createAsyncThunk(
   },
 )
 
+// ユーザログイン
+export const userLogin = createAsyncThunk(
+  'user/userLogin',
+  async ({ email, password }, thunkAPI) => {
+    try {
+      const response = await axios.post('/api/v1/signin', {
+        user: {
+          email: email,
+          password: password,
+        },
+      })
+      return response.data
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.response.data)
+    }
+  },
+)
+
 const userInitialState = {
   name: '',
   email: '',
@@ -47,19 +65,35 @@ export const userSlice = createSlice({
       state.isLoading = false
       state.isError = false
       state.isAuthenticated = true
-      state.email = payload.user.email
-      state.name = payload.user.name
       state.flashMessage = payload.message
+      state.name = payload.user.name
+      state.email = payload.user.email
     })
     builder.addCase(userRegister.pending, (state, { payload }) => {
       state.isLoading = true
     })
     builder.addCase(userRegister.rejected, (state, { payload }) => {
-      console.log(payload)
       state.isLoading = false
       state.isError = true
       state.errors = { ...payload.errors }
       state.flashMessage = payload.message
+    })
+
+    builder.addCase(userLogin.fulfilled, (state, { payload }) => {
+      state.isLoading = false
+      state.isError = false
+      state.isAuthenticated = true
+      state.flashMessage = payload.message
+      state.name = payload.user.name
+      state.email = payload.user.email
+    })
+    builder.addCase(userLogin.pending, (state, { payload }) => {
+      state.isLoading = true
+    })
+    builder.addCase(userLogin.rejected, (state, { payload }) => {
+      state.isLoading = false
+      state.isError = true
+      state.errors = { message: payload.message }
     })
   },
 })
