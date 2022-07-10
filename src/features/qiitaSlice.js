@@ -18,20 +18,21 @@ export const qiitaSlice = createSlice({
   initialState: { loading: false, error: null, items: [] },
   reducers: {
     // 通信を開始した時に呼ぶ関数
-    fetchStart(state, action) {
+    fetchStart: (state, action) => {
       state.loading = true
       state.error = null
     },
     // 通信が失敗した時に呼ぶ関数
-    fetchFailure(state, action) {
+    fetchFailure: (state, action) => {
       state.loading = false
       state.error = action.payload
     },
     // 通信が成功した時に呼ぶ関数
-    fetchSuccess(state, action) {
+    fetchSuccess: (state, action) => {
       state.loading = false
       state.error = null
       state.items = action.payload
+      console.log(action)
     },
   },
 })
@@ -40,7 +41,7 @@ export const qiitaSlice = createSlice({
 export const { fetchStart, fetchFailure, fetchSuccess } = qiitaSlice.actions
 
 // Selectors
-export const selectQiita = ({ qiita }) => qiita
+export const selectQiita = (state) => state.qiita
 
 // Reducer(must be default export)
 export default qiitaSlice.reducer

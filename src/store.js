@@ -1,12 +1,12 @@
 // The thunk middleware was automatically added
 import { configureStore } from '@reduxjs/toolkit'
-import { UsersReducer } from 'reducks/users/reducers'
 import qiitaReducer from 'features/qiitaSlice'
+import userReducer from 'features/userSlice'
 
 // automatically combineReducers
 const store = configureStore({
   reducer: {
-    users: UsersReducer,
+    user: userReducer,
     qiita: qiitaReducer,
   },
 })

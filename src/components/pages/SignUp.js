@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { signUp } from 'reducks/users/operations'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { userRegister, userSelector, clearErrors } from 'features/userSlice'
 
 import FormErrorMessages from 'components/ui/FormErrorMessages'
 
@@ -16,7 +17,9 @@ import {
 } from 'components/css/Auth'
 
 const SignUp = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { isLoading, isError, errors } = useSelector(userSelector)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -24,8 +27,8 @@ const SignUp = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [formErrors, setFormErrors] = useState({})
   const [submittable, setSubmittable] = useState(false)
-  const [processing, setProcessing] = useState(false)
 
+  // フォームバリデーション
   useEffect(() => {
     if (name && email && password && passwordConfirmation) {
       setSubmittable(true)
@@ -34,17 +37,27 @@ const SignUp = () => {
     }
   }, [name, email, password, passwordConfirmation])
 
+  // フォームにエラーメッセージの反映
+  useEffect(() => {
+    if (isError) {
+      setFormErrors({ ...errors })
+      dispatch(clearErrors())
+    }
+  }, [isError, errors, dispatch])
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (processing) return
-    setProcessing(true)
-    // TODO: 返り値がないものにawaitしている。
-    try {
-      dispatch(await signUp(name, email, password, passwordConfirmation))
-    } catch (error) {
-      setFormErrors({ ...error })
-    }
-    setProcessing(false)
+    if (isLoading) return
+
+    await dispatch(
+      userRegister({
+        username: name,
+        email: email,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+      }),
+    ).unwrap()
+    navigate('/')
   }
 
   return (
@@ -98,7 +111,7 @@ const SignUp = () => {
           />
           <FormErrorMessages errors={formErrors.passwordConfirmation} />
         </FormGroup>
-        <FormButton type="submit" disabled={!submittable || processing}>
+        <FormButton type="submit" disabled={!submittable || isLoading}>
           アカウントを登録する
         </FormButton>
         <Link to="/signin">ログインフォームはこちら</Link>
