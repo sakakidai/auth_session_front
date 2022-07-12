@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { userRegister, userSelector, clearErrors } from 'features/userSlice'
+import { userRegister, selectUser, clearErrors } from 'features/userSlice'
 
 import FormErrorMessages from 'components/ui/FormErrorMessages'
 
@@ -19,7 +19,7 @@ import {
 const SignUp = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoading, isError, errors } = useSelector(userSelector)
+  const { isLoading, isError, errors } = useSelector(selectUser)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')

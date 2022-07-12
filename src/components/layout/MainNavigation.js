@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+import { selectUser } from 'features/userSlice'
 
 import palette from 'components/themes/palette'
 
@@ -42,9 +44,11 @@ const NavLink = styled(Link)`
 `
 
 const MainNavigation = () => {
+  const { name, email, isAuthenticated } = useSelector(selectUser)
+
   return (
     <Navbar>
-      <Link to="/dashboard">
+      <Link to="/">
         <NavbarBrand>Auth Session App</NavbarBrand>
       </Link>
       <Nav>
@@ -53,6 +57,9 @@ const MainNavigation = () => {
         </NavItem>
         <NavItem>
           <NavLink to="/signin">ログイン</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink to="/dashboard">{email}</NavLink>
         </NavItem>
       </Nav>
     </Navbar>

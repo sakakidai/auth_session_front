@@ -6,7 +6,7 @@ export const userRegister = createAsyncThunk(
   'user/userRegister',
   async ({ username, email, password, passwordConfirmation }, thunkAPI) => {
     try {
-      const response = await axios.post('/api/v1/signup', {
+      const response = await axios.post('/api/v1/auth/signup', {
         user: {
           name: username,
           email: email,
@@ -26,7 +26,7 @@ export const userLogin = createAsyncThunk(
   'user/userLogin',
   async ({ email, password }, thunkAPI) => {
     try {
-      const response = await axios.post('/api/v1/signin', {
+      const response = await axios.post('/api/v1/auth/signin', {
         user: {
           email: email,
           password: password,
@@ -38,6 +38,16 @@ export const userLogin = createAsyncThunk(
     }
   },
 )
+
+// 認証済みのユーザの取得
+export const fetchCurrentUser = createAsyncThunk('user/fetchCurrentUser', async (_, thunkAPI) => {
+  try {
+    const response = await axios.get('/api/v1/auth/sessions')
+    return response.data
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.response.data)
+  }
+})
 
 const userInitialState = {
   name: '',
@@ -64,12 +74,11 @@ export const userSlice = createSlice({
     builder.addCase(userRegister.fulfilled, (state, { payload }) => {
       state.isLoading = false
       state.isError = false
-      state.isAuthenticated = true
       state.flashMessage = payload.message
       state.name = payload.user.name
       state.email = payload.user.email
     })
-    builder.addCase(userRegister.pending, (state, { payload }) => {
+    builder.addCase(userRegister.pending, (state) => {
       state.isLoading = true
     })
     builder.addCase(userRegister.rejected, (state, { payload }) => {
@@ -87,13 +96,27 @@ export const userSlice = createSlice({
       state.name = payload.user.name
       state.email = payload.user.email
     })
-    builder.addCase(userLogin.pending, (state, { payload }) => {
+    builder.addCase(userLogin.pending, (state) => {
       state.isLoading = true
     })
     builder.addCase(userLogin.rejected, (state, { payload }) => {
       state.isLoading = false
       state.isError = true
       state.errors = { message: payload.message }
+    })
+
+    builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
+      state.isLoading = false
+      state.isAuthenticated = true
+      state.name = payload.user.name
+      state.email = payload.user.email
+    })
+    builder.addCase(fetchCurrentUser.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(fetchCurrentUser.rejected, (state) => {
+      state.isLoading = false
+      state.isAuthenticated = false
     })
   },
 })
@@ -102,7 +125,7 @@ export const userSlice = createSlice({
 export const { clearErrors } = userSlice.actions
 
 // Selectors
-export const userSelector = (state) => state.user
+export const selectUser = (state) => state.user
 
 // Reducer
 export default userSlice.reducer

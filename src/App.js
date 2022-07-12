@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { fetchCurrentUser } from 'features/userSlice'
 
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
@@ -29,6 +32,12 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser())
+  }, [dispatch])
+
   return (
     <>
       <GlobalStyle />

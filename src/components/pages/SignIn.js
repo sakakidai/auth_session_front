@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { userLogin, userSelector, clearErrors } from 'features/userSlice'
+import { userLogin, selectUser, clearErrors } from 'features/userSlice'
 
 import styled from 'styled-components'
 
@@ -23,7 +23,7 @@ const ErrorMessage = styled.div`
 const SignIn = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoading, isError, errors } = useSelector(userSelector)
+  const { isLoading, isError, errors } = useSelector(selectUser)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
