@@ -23,7 +23,7 @@ const ErrorMessage = styled.div`
 const SignIn = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoading, isError, errors } = useSelector(selectUser)
+  const { isLoading, isError, errors, isSubmitted } = useSelector(selectUser)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -47,11 +47,17 @@ const SignIn = () => {
     }
   }, [isError, errors, dispatch])
 
-  const handleSubmit = async (event) => {
+  // ログイン成功時にrootにリダレクト
+  useEffect(() => {
+    if (isSubmitted) {
+      navigate('/')
+    }
+  }, [isSubmitted, navigate])
+
+  const handleSubmit = (event) => {
     event.preventDefault()
     if (isLoading) return
-    await dispatch(userLogin({ email: email, password: password })).unwrap()
-    navigate('/')
+    dispatch(userLogin({ email: email, password: password }))
   }
 
   return (

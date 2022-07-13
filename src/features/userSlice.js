@@ -53,6 +53,7 @@ const userInitialState = {
   name: '',
   email: '',
   isAuthenticated: false,
+  isSubmitted: false,
   isLoading: false,
   isError: false,
   errors: {},
@@ -92,6 +93,7 @@ export const userSlice = createSlice({
       state.isLoading = false
       state.isError = false
       state.isAuthenticated = true
+      state.isSubmitted = true
       state.flashMessage = payload.message
       state.name = payload.user.name
       state.email = payload.user.email

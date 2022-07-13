@@ -1,13 +1,11 @@
-import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { fetchCurrentUser } from 'features/userSlice'
 
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
 import palette from 'components/themes/palette'
 
 import Layout from 'components/layout/Layout'
+import Auth from 'components/layout/Auth'
 import Home from 'components/pages/Home'
 import Dashboard from 'components/pages/Dashboard'
 import SignUp from 'components/pages/SignUp'
@@ -32,22 +30,19 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const App = () => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(fetchCurrentUser())
-  }, [dispatch])
-
   return (
     <>
       <GlobalStyle />
       <Layout>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="dashboard" element={<Dashboard />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/qiita" element={<QiitaItems />} />
+
+          <Route path="/" element={<Auth />}>
+            <Route path="/" element={<Home />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="/qiita" element={<QiitaItems />} />
+          </Route>
         </Routes>
       </Layout>
     </>
