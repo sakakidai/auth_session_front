@@ -39,6 +39,16 @@ export const userLogin = createAsyncThunk(
   },
 )
 
+// ログアウト
+export const userLogOut = createAsyncThunk('user/userLogOut', async (_, thunkAPI) => {
+  try {
+    const response = await axios.delete('/api/v1/auth/signout')
+    return response.data
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.response.data)
+  }
+})
+
 // 認証済みのユーザの取得
 export const fetchCurrentUser = createAsyncThunk('user/fetchCurrentUser', async (_, thunkAPI) => {
   try {
@@ -105,6 +115,30 @@ export const userSlice = createSlice({
       state.isLoading = false
       state.isError = true
       state.errors = { message: payload.message }
+    })
+
+    builder.addCase(userLogOut.fulfilled, (state) => {
+      state.isError = false
+      state.errors = {}
+      state.flashMessage = ''
+      state.isLoading = false
+      state.isAuthenticated = false
+      state.isSubmitted = false
+      state.name = ''
+      state.email = ''
+    })
+    builder.addCase(userLogOut.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(userLogOut.rejected, (state) => {
+      state.isError = false
+      state.errors = {}
+      state.flashMessage = ''
+      state.isLoading = false
+      state.isAuthenticated = false
+      state.isSubmitted = false
+      state.name = ''
+      state.email = ''
     })
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {

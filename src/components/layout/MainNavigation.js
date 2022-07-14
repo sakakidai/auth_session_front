@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
-import { selectUser } from 'features/userSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, userLogOut } from 'features/userSlice'
 
 import palette from 'components/themes/palette'
 
@@ -43,8 +43,24 @@ const NavLink = styled(Link)`
   }
 `
 
+const NavButton = styled.a`
+  transition: color 0.5s;
+  cursor: pointer;
+  &:hover {
+    color: white;
+    transition: color 0.5s;
+  }
+`
+
 const MainNavigation = () => {
-  const { name, email, isAuthenticated } = useSelector(selectUser)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { email, isAuthenticated } = useSelector(selectUser)
+
+  const handleLogOut = () => {
+    dispatch(userLogOut())
+    navigate('/signin')
+  }
 
   return (
     <Navbar>
@@ -52,14 +68,21 @@ const MainNavigation = () => {
         <NavbarBrand>Auth Session App</NavbarBrand>
       </Link>
       <Nav>
-        <NavItem>
-          <NavLink to="/signup">新規登録</NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/signin">ログイン</NavLink>
-        </NavItem>
+        {!isAuthenticated && (
+          <>
+            <NavItem>
+              <NavLink to="/signup">新規登録</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/signin">ログイン</NavLink>
+            </NavItem>
+          </>
+        )}
         <NavItem>
           <NavLink to="/dashboard">{email}</NavLink>
+        </NavItem>
+        <NavItem>
+          {isAuthenticated && <NavButton onClick={handleLogOut}>ログアウト</NavButton>}
         </NavItem>
       </Nav>
     </Navbar>

@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCurrentUser, selectUser } from 'features/userSlice'
 import { Navigate, Outlet } from 'react-router-dom'
 
 const Auth = () => {
+  const [waiting, setWaiting] = useState(true)
   const dispatch = useDispatch()
   const { isLoading, isAuthenticated } = useSelector(selectUser)
 
@@ -11,13 +12,19 @@ const Auth = () => {
     if (!isAuthenticated) {
       dispatch(fetchCurrentUser())
     }
+    setWaiting(false)
   }, [dispatch, isAuthenticated])
 
-  if (isLoading) {
+  if (isLoading || waiting) {
     return <p>loading...</p>
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="signin" />
+  console.log('レンダー')
+  if (isAuthenticated) {
+    return <Outlet />
+  } else {
+    return <Navigate to="signin" />
+  }
 }
 
 export default Auth
